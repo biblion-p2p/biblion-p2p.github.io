@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Biblion</title>
+<style>
+body {
+  width: 600px;
+}
+</style>
+</head>
+<body>
+
+<p>
+  Two types of applications can be defined within the Biblion platform, network
+  transports and services.
+</p>
+
+<p>
+  A network transport defines a method of sending data between peers. It must
+  have an addressing scheme that can be stored in routing tables later.
+</p>
+
+create_stream<br>
+send_message<br>
+is_ready<br>
+become_ready<br>
+listen<br>
+shutdown<br>
+
+<p>
+  Services form the brains of the Biblion platform. They must be able to handle
+  messages coming from other peers, and commands from the biblion client running
+  locally.
+</p>
+
+start<br>
+handle_message<br>
+handle_rpc<br>
+shutdown<br>
+
+<p>
+  A library is defined by a JSON document that codifies the structure of the
+  community.
+</p>
+
+Every library definition should include these values:<br>
+
+name - a user-readable name for the library. Used for making things easier on the client<br>
+owner - peer id of the owner of the library<br>
+
+Optional values<br>
+memberdb - defines a member database for the library<br>
+
+
+
+
+Per-application configuration
+
+Kademlia
+"kademlia.authorization"
+Can be "userdb", "owner_check"
+
+BitTorrent
+"bittorrent.authorization"
+Can
+
+SimpleDownload
+Hm, this should probably be merged with BitTorrent actually :^)
+
+<h2>Service specifications</h2>
+
+Biblion - core biblion meta-protocol<br>
+hello (addresses, protocols)<br>
+Kademlia - p2p dht<br>
+find_node<br>
+find_value<br>
+store<br>
+BitTorrent - tit-for-tat distributed downloads<br>
+getpiece<br>
+have<br>
+bitfield<br>
+interested<br>
+uninterested<br>
+choke<br>
+unchoke<br>
+SimpleDownload - a simple ftp-like download protocol<br>
+download<br>
+MetadataSet - track what files are available in a library context<br>
+getfiles<br>
+checkfile(id)<br>
+UserSet - track what users are allowed in a library context<br>
+getusers<br>
+checkusers(id)<br>
+NameSet - track a set of (key, value) pairs in a library context, intended for dynamic name resolution<br>
+getname<br>
+Bank - Manage a ledger of peer balances within a library (not started)<br>
+send_transaction<br>
+query_balance<br>
+preauthorize<br>
+Gossip - send updates throughout a peer network (in progress)<br>
+query_newest<br>
+Blockchain - publically verifable ledger (not started)<br>
+verify<br>
+mine<br>
+update_mempool<br>
+ScryptPoW - an scrypt-based Proof-of-work algorithm (not started)<br>
+mine<br>
+</body>
+</html>

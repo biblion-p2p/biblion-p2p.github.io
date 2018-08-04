@@ -1,26 +1,39 @@
-# Design overview for the whole thing. This is the closest thing to a whitepaper i'll write up.
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Biblion</title>
+<style>
+body {
+  width: 600px;
+}
+</style>
+</head>
+<body>
 
-
-Abstract
-
+<h3>Abstract</h3>
+<p>
 Biblion is a platform for creating self-defining decentralized data communities.
 Nodes within Biblion participate in a global content-addressable file sharing
-network. Users can share files, or definition files that define a library: a
-community for sharing data. Libraries can define themselves using services
+network. Users can share files and create communities called "libraries".
+Libraries are defined by a configuration file that defines
 provided by the Biblion application, or define completely custom code. At the
 core of Biblion is a modern networking stack that supports peer authentication
 and stream multiplexing.
+</p>
 
+<ol>
+<li>Abstract</li>
+<li>Overview</li>
+<li>Existing Work</li>
+<li>Platform</li>
+<li>Library architecture</li>
+<li>Network architecture</li>
+<li>Core Services</li>
+<li>Future Work</li>
+</ol>
 
-1. Abstract
-2. Overview
-3. Existing Work
-4. Core services
-5. Library architecture
-6. Network architecture
-7. Future Work
-
-=Overview=
+<h3>Overview</h3>
 
 Biblion is a platform for peer-to-peer networks built from the ground up.
 
@@ -36,7 +49,7 @@ Biblion is a platform for peer-to-peer networks built from the ground up.
   - Multiplexing
     - One authentication scheme. Multiple transports.
 
-=Existing Work=
+<h3>Existing Work</h3>
 
 IPFS/Libp2p - The Interplanetary File System[]
 MojoNation/Mnet -
@@ -46,33 +59,43 @@ Ethereum
 Freenet
 Tor
 
-=Core Services=
+<h3>Platform</h3>
 
-BitTorrent
-Kademlia
-Blockchain
-Gossip
-SimpleBank
-UserDB
-DataStore
+Peers
+Streams
+Tranports
+Services
 
-=Library Achitecture=
+
+<h3>Library Achitecture</h3>
 - Ownership
 - Managing users
 - Gossip protocols
 - Privacy
 
-=Network Architecture=
+<h3>Network Architecture</h3>
 - Multiplexing of requests, over multiplexed transports
 - define "channel"
 - QUIC and TLS1.3
 - UDP auth cookies
 - Peer storage
 
-=Future Work=
+<h3>Core Services</h3>
+
+BitTorrent
+Kademlia
+Blockchain
+Gossip
+Bank
+UserSet
+
+<h3>Future Work</h3>
 -Network hardening (QUIC)
 -Additional configuration rules for libraries
 -Biblion 2.0 (library configurations should be able to reference arbitrary code)
 -Community types and incentive strategies
   - Completely private/disconnected libraries
   -
+
+</body>
+</html>
