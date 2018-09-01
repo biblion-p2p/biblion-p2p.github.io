@@ -5,7 +5,12 @@
 <title>Biblion</title>
 <style>
 body {
-  width: 600px;
+  max-width: 600px;
+  margin: 40px auto;
+  line-height: 1.6;
+  font-size: 18px;
+  color: #444;
+  padding: 0 10px;
 }
 </style>
 </head>
@@ -33,6 +38,8 @@ and stream multiplexing.
 <li>Network architecture</li>
 <li>Core Services</li>
 <li>Library architecture</li>
+<li>Library specifications</li>
+<li>Biblion - The Global Library</li>
 <li>Future Work</li>
 </ol>
 
@@ -109,35 +116,155 @@ files, and anything else that can stored in a static file.</p>
   the context of a library. When a peer joins a library, they are aware of what
   the trust model is, and where the power within the library lies.</p>
 
-<p>
+<p>A library is a set of services and trust relationships to those services. In
+  a library's internal DHT, membership can be limited by a peer whitelist. For
+  peers participating in the DHT, they will only honor requests or add nodes that
+  are in the whitelist. Because each node participating in this library agrees
+  to enforce the same whitelist, security is roughly preserved. The DHT in this
+  example is immune to corruption as long as the nodes in the whitelist are
+  secure. Meanwhile, data leakage is possible if any singular peer has been
+  compromised.</p>
 
-- Library definitions
-  - Ownership and usership
-  - Authorization strategies
-  - Pluggable routing (DHT, DNS, etc)
-- Nanobartering/agorics
-- Blockchain
-- Networking
-  - Multiplexing
-    - One authentication scheme. Multiple transports.
+<p>Libraries can also define how files and data are located within a network. A
+  DHT is effective and robust, but can have poor performance characteristics.
+  Instead, a library can opt to host a set of mirrors that index *all* data
+  within the library. This puts more stress on the indexes, but is much easier
+  to manage. We imagine that multiple clever routing strategies inspired by
+  distributed database design will be usable.</p>
+
+<p>The definitions of these files are defined in JSON documents, that specify
+  the nature of the service, its context, and what authorization is necessary.
+  Because the specification is itself a file, library definitions are objects
+  within the Biblion system just like content itself.</p>
+
+<p>Authorization is an important concept within Biblion. The simplest form of
+  authorization is a user whitelist. All identities in Biblion are verified,
+  meaning we can be confident that a user is authorized to perform a certain
+  action or access a certain piece of information. More advanced forms of
+  authorization are accomplished by using a payments metaphor. Users are only
+  able to perform a certain action if they have the required balance of a virtual
+  currency, which is spent as the download occurs. This mirrors real world
+  economies, and especially cryptocurrencies. Unlike most popular cryptocurrencies,
+  balances within Biblion can explicitly be centrally managed. That is, a
+  trusted party will maintain the balance sheets and verify that payments
+  are settled correctly.</p>
+
+<p>We are finally ready to offer a real solution to the free-rider problem.
+  Within a library, trusted nodes can run a bank that manages balances of a local
+  currency for use within the library. A user "spends" her tokens while downloading
+  data from another peer within the library. This ensures that a user can only
+  download as much as she uploads. Banks can allocate initial funds to users
+  when they join a library, or generate new money in "freeleech" events: periods
+  of time where downloads are free but uploaders are paid regardless. There are
+  many strategies banks can use to increase the money supply while incentivizing
+  good work.</p>
+
+<p>Because the libraries are specified customly using defintions, libraries can
+  come up with various competing strategies for encouraging community support.
+  Because of the community driven nature of Biblion, we intend for the network
+  to store content metadata as well as the data itself. BitTorrent and Usenet
+  indexes provide huge value for users looking for particular files, but are
+  prone to attack and censorship. By making the metadata indexes files in the
+  system as well, the sites and communities are much more robust.
+
+<p>They are not invincible, however. Censorship takes the form of eliminating or
+  corrupting the leadership who have special permissions. In these events, users
+  can take the data associated with the community - which they have been
+  hosting cooperatively - and rally around new leadership. In the event of
+  corruption of a bank, this will mean that the bank and its token will have
+  to be abandonned, as transactions will no longer be processed. However, if
+  the bank has a transparent balance sheet, the balances *could* be moved to
+  new leadership.</p>
+
+<p>Such events would surely have disastrous effects on the local currency. Even
+  if the bank can recover the funds and adopt new leadership, there will be
+  a confidence crisis, and the currency's value with respect to others will
+  drop. These banks are also extremely vulnerable to temporary corruption. That
+  is, library administrators could temporarily distribute funds illicitly to
+  each other in an effort to exploit some market. We can avoid these situations
+  by creating a bank with no leader: a proof-of-work blockchain. Blockchains
+  allow us to update the funds as long as over half of the hash power committed
+  to the chain is running correctly. This has proved extremely effective in
+  practice, at the price of huge natural resources and performance. We implement
+  a blockchain as a sort of central bank for Biblion. This central blockchain
+  can be used to settle transactions across different local banks in a reliable
+  way. We opt for proof-of-work to start, but hopefully we can switch to a
+  useful proof-of-storage at some point in the future.</p>
+
+<p>Libraries can implement their own blockchains as well. They can also define
+  the criteria by which new blocks are accepted. This means a blockchain can
+  be defined that uses a small set of hashers, or a small set of signatories
+  who are the only ones allowed to update the banking records. This can then
+  be used with blockchain consensus to maintain the state of user balances. There
+  are several weaknesses in systems like this (bootstrap integrity being the
+  most pressing), but they offer effective solutions to transparently managing
+  payments in a performant way.</p>
+
+<p>Libraries can define their own currencies. They can define how those currencies
+  are spent. They can define what services are active within the library. The
+  combination of these things means that libraries can collaboratively provide
+  services of value to others. That is, a library defines a service which others
+  can pay to use. Peers from outside the library could buy some of the currency
+  local to the library and spend it on services within the library, and then
+  sell the remainder of their currency for other things. Peers can invest in
+  each other's libraries by buying the currency in anticipation of the value
+  going up. Libraries can also define alternative services for payments. For
+  example, a library could provide a VPN service that has exit points at
+  various places worldwide, for navigating around firewalls. Other applications
+  include video transcoding, proxying, anonymization, TURN relays, and much
+  more. Because libraries can define arbitrary services, Biblion creates a
+  market for collaborative services that reward communities that can provide
+  the strongest service for the lowest price. These concepts are heavily
+  inspired by the ideas of "agoric computing", but do not require rigid smart
+  contracts. Rather, much like reality, the cost and rewards for services will
+  be determined by the market, encouraging constant competition and growth.</p>
+
+<p>Peers within Biblion may be members of dozens or hundreds of libraries. To
+  have this system work effectively, peers reuse connections for all services.
+  Services are multiplexed over the whole connection using a SPDY-like protocol.
+  Every peer connection is authenticated when it's established. This ensures
+  that each peer knows exactly who it is speaking with. Because services share
+  code and connections, they can be implemented very effectively. Each service
+  on a connection is simply an extra piece of state, which is only activated if
+  a stream arrives that requires that particular service.</p>
+
+<p>Taken together, we create a robust yet flexible file sharing network. Files
+  can be transferred quickly and with integrity. Libraries can define
+  incentivization structures that benefit all members. Members across libraries
+  can collaborate by trading tokens within a global market. The community can
+  update the code and services over time, ensuring that Biblion can evolve
+  well into the future.</p>
 
 <h3>Existing Work</h3>
+
+[TODO: add links to all these things]
 
 <p>There has recently been a huge amount of development in decentralized systems.
 In the wake of the NSA revelations, people are more concerned about how to make
 data more resilient, more open, and more private. Biblion takes inspiration
 from both older systems and recent developments.</p>
 
-<p><b>BitTorrent</b> </p>
+<p><b>BitTorrent</b> is a peer-to-peer file distribution protocol. Peers upload
+the content they have while they are in the process of downloading. By favoring
+rare pieces and choosing to connect with peers with strong connectivity,
+BitTorrent succeeds in providing extremely fast file distribution. Pieces are
+verified as they arrive, ensuring data integrity. Peer discovery
+was originally dependent on central services called trackers. With the development
+of Mainline DHT, peers can find each other by participating in a collaborative
+global routing table. The success of BitTorrent and Mainline DHT is a major
+influence on Biblion.</p>
 
-<p><b>MojoNation</b>, and its successor <b>Mnet</b>, </p>
+<p><b>MojoNation</b>, and its successor <b>Mnet</b>, were filesharing networks
+ that drew upon the ideas of agorics. Users could "trade" resources amongst each other.
+ There was a currency in place to allow users to set prices.</p>
 
-<b>IPFS</b> is the Interplanetary File System. <b>Filecoin</b> is a companion
-project to IPFS, and aims to incentivize storage on the system.
+<p><b>IPFS</b> is the Interplanetary File System. <b>Filecoin</b> is a companion
+project to IPFS, and aims to incentivize storage on the system. These systems
+also draw heavy inspiration from BitTorrent and DHTs. Filecoin actively
+encourages research in useful proofs-of-storage, which could be extremely
+useful to Biblion in the future.</p>
 
-
-Bitcoin
-Freenet
+<p><b>Bitcoin</b> is the original blockchain currency.</p>
 
 <h3>Platform</h3>
 
@@ -150,7 +277,7 @@ Services
 
 <h3>Network Architecture</h3>
 
-<p>Peers to need to be able to connect to each other directly.
+<p>Peers to need to be able to connect to each other directly. </p>
 
 - Multiplexing of requests, over multiplexed transports
   - Only one connection, per (peer, transport)
@@ -162,37 +289,56 @@ Services
 
 <h3>Core Services</h3>
 
-SimpleDownload
-BitTorrent
-Kademlia
-Blockchain
+<p>The following services should be a part of any Biblion distribution.</p>
+
+<p><b>Kademlia</b> - A distributed hash table to be used in peer discovery.
 Gossip
-Bank
+<p><b>SimpleDownload</b> - An FTP-like download protocol. Useful for transferring
+small files.</p>
+<p><b>BitTorrent</b> - </p>
+<p><b>Blockchain</b></p>
+<p><b>SimpleBank</b> - A simple implementation of a "bank": a service that
+manages balances for a set of users. The bank can distribute funds as it
+sees fit. Users can spend their funds to each other. They can also allocate
+funds to a user in pre-authorizations.</p>
 
 
 <h3>Library Achitecture</h3>
--Routers
--Downloaders
--Metadata Sets
--Authorization
+<p>Routers</p>
+<p>Downloaders</p>
+<p>Metadata Sets</p>
+<p>Authorization</p>
 
 <h3>Library Specifications</h3>
-- Defining services
-- Ownership and authentication
-- Managing users
-- Managing metada
-- Permissions
+<p>Defining services</p>
+<p>Ownership and authentication</p>
+<p>Managing users</p>
+<p>Managing metadata</p>
+<p>Permissions</p>
+
+<h3>Biblion - The Global Library</h3>
+
+<p>We define a global library that all peers should participate in. This library
+  is limited in its features and power, but is extremely resilient to attack. It
+  includes a central blockchain, and a global DHT. The global library can be
+  used to host specifications for individual libraries.</p>
+
+<p>Central blockchain</p>
+<p>PoW-secured DHT</p>
+<p>Blockchain temporary announcements</p>
 
 <h3>Future Work</h3>
--Network hardening (QUIC)
--Additional configuration rules for libraries
--Biblion 2.0 (library configurations should be able to reference arbitrary code)
--Community types and incentive strategies
-  - Completely private/disconnected libraries
--Proof of storage
--Integration with other services
-  - IPFS, libp2p
-  - Beaker browser
+<p>Network hardening (QUIC)</p>
+<p>Additional configuration rules for libraries</p>
+<p>Transparent banking</p>
+<p>Biblion 2.0 (library configurations should be able to reference arbitrary code)</p>
+<p>Community types and incentive strategies</p>
+<p>Completely private/disconnected libraries</p>
+<p>Proof of storage</p>
+<p>Integration with other services</p>
+<p>WASM-based service bundles</p>
+<p>IPFS, libp2p</p>
+<p>Beaker browser</p>
 
 </body>
 </html>
