@@ -264,13 +264,46 @@ also draw heavy inspiration from BitTorrent and DHTs. Filecoin actively
 encourages research in useful proofs-of-storage, which could be extremely
 useful to Biblion in the future.</p>
 
-<p><b>Bitcoin</b> is the original blockchain currency.</p>
+<p><b>Bitcoin</b> is the original blockchain currency. The primary innovation
+of Bitcoin is to distribute the "trust" of the network among all peers. There
+is no central authority that controls Bitcoin, as long as the majority of the
+network acts independently. Bitcoin mints coins autonomously.</p>
+
+<p><b>Tahoe-LAFS</b> - the "least authority file system". Tahoe stores data
+  encrypted across various servers. It's data distribution model is based on the
+  principle of "least authority". Each server is only able to access data that
+  it absolutely requires. Decryption of user content happens on a trusted node,
+  while untrusted nodes only ever see encrypted data. The model of least
+  authority is important in cooperative peer-to-peer systems, since there are
+  only weak links of trust among nodes.</p>
 
 <h3>Platform</h3>
 
-Identities
-Peers
-  - Note storage
+<p>Biblion services are built within a particular system model. In some sense,
+  the Biblion platform is much like an operating system, It provides a consistent
+  API for all services to use, and exposes the same primitives. Services can
+  expect the APIs to work the same way in any Biblion implementation.</p>
+
+<p><b>Identities</b> represent a user within the network. An identity is tied to
+  a assymetric key pair. It is of upmost importance that the private key of
+  an identity is kept secure. If stolen, the thief will be able to impersonate
+  that identity forever. A node can run multiple with multiple identities.
+  However, it should be noted that this alone is not a true anonymization strategy:
+  While you can create different identities to participate in certain services,
+  your computer will advertise the same IP for each identity. Identities
+  run services, and can be members of libraries. Running multiple identities in
+  the same library will result in multiple service instances running.</p>
+
+<p>A <b>peer</b> is connectable identity. Effectively, it is a tuple of an
+  identity's public key and an object describing how to connect to it. An
+  identity keeps tracks of its peers as it runs its services. Keeping records
+  of peers is crucial for routing, as we need a record of who we know about,
+  and how to connect to them. Each identity should keep track of its peers
+  separately. Peers that aren't used or active can be cycled out of the peer
+  store. Peers represent additional actors that can communicate in services.
+  Within a service, all communication is done between peers.</p>
+
+<p>A <b>stream</b> represents a communication between two peers.
 Streams
 Transports
 Services
